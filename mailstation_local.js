@@ -643,29 +643,23 @@ function load_dataflash() {
 var fileRAMApp;
 var fileReaderRAMApp = new FileReader();
 
-var fileChannel;
-var fileReaderChannel = new FileReader();
-
 fileReaderRAMApp.addEventListener('loadend', function() {
 	var loadedAppBytes = new Uint8Array(fileReaderRAMApp.result);
 
 	stop();
 
+	var msemu_4to8_loader = [195,28,64,28,64,14,64,9,64,0,0,0,0,0,1,0,8,0,6,0,52,116,111,56,108,111,97,100,17,0,128,33,48,64,1,208,63,62,1,211,8,211,7,237,176,195,0,128];
+
+	for(var i = 0; i < msemu_4to8_loader.length; i++) {
+		dataflash[i] = msemu_4to8_loader[i];
+	}
+
 	for(var i = 0; i < loadedAppBytes.length; i++) {
-		ram[0x4000 + i] = loadedAppBytes[i];
+		dataflash[msemu_4to8_loader.length + i] = loadedAppBytes[i];
 	}
 
-	z80.pc = 0x8000;
-
+	reset();
 	start();
-});
-
-fileReaderChannel.addEventListener('loadend', function() {
-	var loadedChannelBytes = new Uint8Array(fileReaderChannel.result);
-	
-	for(var i = 0; i < loadedChannelBytes.length; i++) {
-		dataflash[i] = loadedChannelBytes[i];
-	}
 });
 
 function dragenter_handler(e) {
@@ -686,20 +680,6 @@ function drop_handler_ramapp(e) {
 	fileRAMApp = dt.files[0];
   
 	run_from_0x8000();
-}
-
-function reload_channel() {
-	fileReaderChannel.readAsArrayBuffer(fileChannel);
-}
-
-function drop_handler_channel(e) {
-	e.stopPropagation();
-	e.preventDefault();
-  
-	var dt = e.dataTransfer;
-	fileChannel = dt.files[0];
-  
-	reload_channel();
 }
 
 function run_from_0x8000() {
