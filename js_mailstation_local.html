@@ -1,0 +1,154 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>JSMailStation</title>
+<!––  written in ~2012, updated Dec 29, 2019.  Copyright (C) Randal Lux, all rights reserved. ––> 
+
+<style type="text/css">/* <![CDATA[ */
+
+			table#menubutton {
+				table-layout: fixed ;
+				width: 100% ;
+			}
+			
+			td {
+				width: 50% ;
+			}
+
+
+			#screen {
+				border: 1px solid black;
+				width: 652px;
+				height: 258px;
+				float: left;
+				margin-right: 10px;
+			}
+			
+			table#menubutton {
+				table-layout: fixed ;
+				width: 100% ;
+			}
+			
+			table#menubutton td {
+				width: 20% ;
+			}
+			
+			table#miscbutton {
+				table-layout: fixed ;
+				width: 100% ;
+			}
+			
+			table td#leftbutton {
+				width: 10% ;
+				bgcolor="#ffffb3"
+			}
+			
+			table td#rightbutton {
+				width: 10% ;
+			}
+			
+
+		/* ]]> */</style>
+		
+<!--[if IE]><script type="text/javascript" src="excanvas-compressed.js"></script><![endif]-->
+
+<script type="text/javascript" src="codeflash.js"></script>
+
+<script type="text/javascript" src="dataflash_capp.js"></script>
+
+<script type="text/javascript" src="z80_full.js"></script>
+
+<script type="text/javascript" src="z80_ops_full.js"></script>
+
+<script type="text/javascript" src="mailstation_local.js"></script>
+
+</head>
+	
+<body style="font-family: monospace;" onload="mailstation_init();">
+<!–– this is a comment ––> 
+
+
+
+<table id="maintable">
+<tr>
+
+<td>
+<!–– this td is the left half of screen ––> 
+This javascript Mailstation emulator is a work (lacking) in progress.  
+The "buttons" under the LCD do not work, and as you may be able to tell, 
+I have not yet mastered style sheets.  The mouse only works with the
+mailstation menubar, and as the menu buttons do not work, you have to use
+the mouse to make selection from menubar.  Just click anywhere on LCD, 
+either on the menubar itself, or the menu icons above it.  
+You need to use the keyboard for everything else.
+
+<canvas id="screen" width="320" height="128" onclick="canvasclicked(event)"></canvas>
+<br>
+
+<table id="menubutton">
+<tr>
+<td><input type="button" value="menu1" onclick="menu1_button()" /></td>
+<td><input type="button" value="menu2" onclick="menu2_button()" /></td>
+<td><input type="button" value="menu3" onclick="menu3_button()" /></td>
+<td><input type="button" value="menu4" onclick="menu4_button()" /></td>
+<td><input type="button" value="menu5" onclick="menu5_button()" /></td>
+</tr>
+</table>
+
+<table id="miscbutton">
+<tr>
+<td id="leftbutton"><input type="button" value="Print"     onclick="print_button()" /></td>
+<td id="leftbutton"><input type="button" value="Main Menu" onclick="main_menubutton()" /></td>
+<td id="leftbutton"><input type="button" value="Back"      onclick="back_button()" /></td>
+<td id="rightbutton"><input type="button" value="Get Email" onclick="email_button()" /></td>
+<td id="rightbutton"><input type="button" value="Select"    onclick="select_button()" /></td>
+<td id="rightbutton"><input type="button" value="Spelling"  onclick="spell_button()" /></td>
+</tr>
+</table>
+
+<br><br><br>
+
+Breakpoint<br>
+<input id="breakpoint1" size="10" onkeyup="bpkeyup(event)" />
+<input id="breakpoint2" size="10" onkeyup="bpkeyup(event)" />
+<input type="button" value="run to bp" onclick="runtobp()" />	
+<input type="button" value="step" onclick="stepinto()" /> &nbsp; &nbsp; 
+<input type="button" value="step over" onclick="stepover()" />
+<input id="mhz" size="12" onkeyup="mhzkeyup(event)" value="25000000" />
+<input id="frmrate" size="2" onkeyup="mhzkeyup(event)" value="60" />
+<input type="checkbox" id="test" onclick="vnp()" />
+<br>
+
+
+
+<div id="registers"></div>
+
+<center>
+<a href="http://tech.groups.yahoo.com/group/mailstation/files/part%20files/Mailstation_DET1_Components.html ">Datasheets</a>
+</center>
+
+</td>
+
+
+<td bgcolor="#ffffb3">
+<!–– this td is the right half of screen ––> 
+
+<input type="button" value="start" onclick="start()" />
+<input type="button" value="stop" onclick="stop()" />
+<input type="button" value="reset" onclick="reset()" />
+<input type="button" value="clear" onclick="xclear()" />
+<input type="button" value="save" onclick="save_dataflash()" />
+<input type="button" value="delete" onclick="delete_dataflash()" />
+<br>
+
+<textarea id="debug_text" rows="36" cols="40" spellcheck="false"></textarea>
+</td>
+
+</tr>
+</table>
+
+	
+</body>
+</html>
+
+<!-- neodl4.grp.bf1.yahoo.com Tue Oct 22 06:56:21 UTC 2019 -->
