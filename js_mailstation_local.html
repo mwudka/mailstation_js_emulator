@@ -47,6 +47,12 @@
 				width: 10% ;
 			}
 			
+			#app_drop_area {
+				width: 200px;
+				background-color: #aaa;
+				height: 200px;
+				text-align: center;
+			}
 
 		/* ]]> */</style>
 		
@@ -142,6 +148,14 @@ Breakpoint<br>
 <br>
 
 <textarea id="debug_text" rows="36" cols="40" spellcheck="false"></textarea>
+</td>
+
+<td valign="top">
+	<div id="app_drop_area" ondragenter="dragenter_handler(event)" ondragover="dragover_handler(event)" ondrop="drop_handler(event)">
+		Drop app compiled for 0x8000
+	</div>
+
+	<input type="button" value="reload & run from 0x8000" onclick="run_from_0x8000()">
 </td>
 
 </tr>

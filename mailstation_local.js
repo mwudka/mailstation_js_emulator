@@ -634,6 +634,46 @@ function load_dataflash() {
 	}
 }
 
+var file;
+var fileReader = new FileReader();
+
+fileReader.addEventListener('loadend', function() {
+	var loadedAppBytes = new Uint8Array(fileReader.result);
+
+	stop();
+
+	for(var i = 0; i < loadedAppBytes.length; i++) {
+		ram[0x4000 + i] = loadedAppBytes[i];
+	}
+
+	z80.pc = 0x8000;
+
+	start();
+});
+
+function dragenter_handler(e) {
+	e.stopPropagation();
+	e.preventDefault();
+}
+
+function dragover_handler(e) {
+	e.stopPropagation();
+	e.preventDefault();
+}
+
+function drop_handler(e) {
+	e.stopPropagation();
+	e.preventDefault();
+  
+	var dt = event.dataTransfer;
+	file = dt.files[0];
+  
+	run_from_0x8000();
+}
+
+function run_from_0x8000() {
+	fileReader.readAsArrayBuffer(file);
+}
 
 var dfwritelimit = 100; // test aid, to limit log output!!!
 var dfreadlimit = 100;
