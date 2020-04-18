@@ -87,22 +87,22 @@ You need to use the keyboard for everything else.
 
 <table id="menubutton">
 <tr>
-<td><input type="button" value="menu1" onclick="menu1_button()" /></td>
-<td><input type="button" value="menu2" onclick="menu2_button()" /></td>
-<td><input type="button" value="menu3" onclick="menu3_button()" /></td>
-<td><input type="button" value="menu4" onclick="menu4_button()" /></td>
-<td><input type="button" value="menu5" onclick="menu5_button()" /></td>
+<td><input type="button" value="menu1" onclick="keyPress(SCANCODE_F1)" /></td>
+<td><input type="button" value="menu2" onclick="keyPress(SCANCODE_F2)" /></td>
+<td><input type="button" value="menu3" onclick="keyPress(SCANCODE_F3)" /></td>
+<td><input type="button" value="menu4" onclick="keyPress(SCANCODE_F4)" /></td>
+<td><input type="button" value="menu5" onclick="keyPress(SCANCODE_F5)" /></td>
 </tr>
 </table>
 
 <table id="miscbutton">
 <tr>
-<td id="leftbutton"><input type="button" value="Print"     onclick="print_button()" /></td>
-<td id="leftbutton"><input type="button" value="Main Menu" onclick="main_menubutton()" /></td>
-<td id="leftbutton"><input type="button" value="Back"      onclick="back_button()" /></td>
-<td id="rightbutton"><input type="button" value="Get Email" onclick="email_button()" /></td>
-<td id="rightbutton"><input type="button" value="Select"    onclick="select_button()" /></td>
-<td id="rightbutton"><input type="button" value="Spelling"  onclick="spell_button()" /></td>
+<td id="leftbutton"><input type="button" value="Print"     onclick="keyPress(SCANCODE_PRINT)" /></td>
+<td id="leftbutton"><input type="button" value="Main Menu" onclick="keyPress(SCANCODE_MAIN_MENU)" /></td>
+<td id="leftbutton"><input type="button" value="Back"      onclick="keyPress(SCANCODE_BACK)" /></td>
+<td id="rightbutton"><input type="button" value="Get Email" onclick="keyPress(SCANCODE_EMAIL)" /></td>
+<td id="rightbutton"><input type="button" value="Select"    onclick="keyPress(SCANCODE_ENTER)" /></td>
+<td id="rightbutton"><input type="button" value="Spelling"  onclick="keyPress(SCANCODE_SPELLING)" /></td>
 </tr>
 </table>
 

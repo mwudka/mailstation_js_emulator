@@ -828,10 +828,13 @@ var keymatrix = [0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff];
 
 function init_keyboard() {
 	debuglog('initing keyboard');
-	document.onkeydown = keyDown;
-	document.onkeyup = keyUp;
+	document.onkeydown = function(e) {
+		keyDown(e.keyCode);
+	};
+	document.onkeyup = function(e) {
+		keyUp(e.keyCode);
+	};
 }
-
 
 function readkeycolumn() {
 	// row, col, & matrix are all active low.
@@ -854,19 +857,8 @@ function readkeycolumn() {
 
 // javascript keycodes mapped to mailstation keymatrix
 var keyboardmap = {
-	112: {row: 0, column: 0x01}, // f1 (main menu)
-//	113: {row: 0, column: 0x02}, // f2 (back)
-	 27: {row: 0, column: 0x02}, // esc (back)  esc seems more right for "back" key
-	114: {row: 0, column: 0x04}, // f3 (print)
-	115: {row: 0, column: 0x08}, // f4 (f1)
-	116: {row: 0, column: 0x10}, // f5 (f2)
-	117: {row: 0, column: 0x20}, // f6 (f3)
-	118: {row: 0, column: 0x40}, // f7 (f4)
-	119: {row: 0, column: 0x80}, // f8 (f5)
 	120: {row: 1, column: 0x08}, // f9 (@)
 	121: {row: 1, column: 0x10}, // f10 (size)
-	122: {row: 1, column: 0x20}, // f11 (check spelling)
-	123: {row: 1, column: 0x40}, // f12 (get email)
 	 33: {row: 1, column: 0x80}, // pg up
 	192: {row: 2, column: 0x01}, // backtick
 	 49: {row: 2, column: 0x02}, // 1
@@ -899,7 +891,6 @@ var keyboardmap = {
 	221: {row: 5, column: 0x10}, // ]
 	 59: {row: 5, column: 0x20}, // ;
 	222: {row: 5, column: 0x40}, // '
-	 13: {row: 5, column: 0x80}, // enter
 	 20: {row: 6, column: 0x01}, // cap lock
 	 65: {row: 6, column: 0x02}, // A
 	 83: {row: 6, column: 0x04}, // S
@@ -931,15 +922,46 @@ var keyboardmap = {
 };
 
 
-function keyDown(evt) {
-	var keyCode = keyboardmap[evt.keyCode];
-	if (keyCode == null) {debuglog('scancode: '+evt.keyCode); return;}
+var SCANCODE_MAIN_MENU = 112;
+var SCANCODE_BACK = 27;
+var SCANCODE_PRINT = 114;
+var SCANCODE_F1 = 115;
+var SCANCODE_F2 = 116;
+var SCANCODE_F3 = 117;
+var SCANCODE_F4 = 118;
+var SCANCODE_F5 = 119;
+var SCANCODE_ENTER = 13;
+var SCANCODE_SPELLING = 122;
+var SCANCODE_EMAIL = 123;
+
+keyboardmap[SCANCODE_MAIN_MENU] = {row: 0, column: 0x01}; // f1 (main menu)]
+keyboardmap[SCANCODE_BACK] = {row: 0, column: 0x02}; // esc (back)  esc seems more right for "back" key
+keyboardmap[SCANCODE_PRINT] = {row: 0, column: 0x04}; // f3 (print)
+keyboardmap[SCANCODE_F1] = {row: 0, column: 0x08}; // f4 (f1)
+keyboardmap[SCANCODE_F2] = {row: 0, column: 0x10}; // f5 (f2)
+keyboardmap[SCANCODE_F3] = {row: 0, column: 0x20}; // f6 (f3)
+keyboardmap[SCANCODE_F4] = {row: 0, column: 0x40}; // f7 (f4)
+keyboardmap[SCANCODE_F5] = {row: 0, column: 0x80}; // f8 (f5)
+keyboardmap[SCANCODE_ENTER] = {row: 5, column: 0x80}; // enter
+keyboardmap[SCANCODE_SPELLING] = {row: 1, column: 0x20}; // f11 (check spelling)
+keyboardmap[SCANCODE_EMAIL] = {row: 1, column: 0x40}; // f12 (get email)
+
+function keyPress(scancode) {
+	keyDown(scancode);
+	setTimeout(function() {
+		keyUp(scancode);
+	}, 100);
+}
+
+function keyDown(scancode) {
+	var keyCode = keyboardmap[scancode];
+	if (keyCode == null) {debuglog('scancode: '+scancode); return;}
 	keymatrix[keyCode.row] &= ~(keyCode.column);
 }
 
 
-function keyUp(evt) {
-	var keyCode = keyboardmap[evt.keyCode];
+function keyUp(scancode) {
+	var keyCode = keyboardmap[scancode];
 	if (keyCode == null) return;
 	keymatrix[keyCode.row] |= keyCode.column;
 }
@@ -958,8 +980,6 @@ function vnp() {
 	showkeymatrix();
 }
 
-
-
 function showkeymatrix() {
 	debuglog('showkeymatrix');
 	for (var i=0; i<10; i++) {
@@ -967,7 +987,6 @@ function showkeymatrix() {
 			 '   ' + ram[0x25f1].toString(2));
 	}
 }
-
 
 ////////////////// LCD /////////////////////////////
 
