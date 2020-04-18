@@ -445,6 +445,12 @@ function frame() {
 	// handling the "start" button event, it returns to the browser.
 	// Note: The z80 clock, and number of T-states per frame are now configurable.
 
+	// Because frames are scheduled asynchronously, it's possible for a fame to be scheduled
+	// while a stop is in effect. To prevent this race condition, we need to check state again
+	// at the beginning of the frame function.
+	if (!running) {
+		return;
+	}
 	
 	framecount++;
 	z80_do_opcodes();
