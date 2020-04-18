@@ -642,23 +642,32 @@ function load_dataflash() {
 
 var fileRAMApp;
 var fileReaderRAMApp = new FileReader();
+var channelPreviouslyInstalled = false;
 
 fileReaderRAMApp.addEventListener('loadend', function() {
 	var loadedAppBytes = new Uint8Array(fileReaderRAMApp.result);
 
 	stop();
 
+	// First, install the 4k-channel-to-8k-ram loader from https://github.com/kbembedded/mailstation/tree/master/src/tools/msemu_4to8_loader
 	var msemu_4to8_loader = [195,28,64,28,64,14,64,9,64,0,0,0,0,0,1,0,8,0,6,0,52,116,111,56,108,111,97,100,17,0,128,33,48,64,1,208,63,62,1,211,8,211,7,237,176,195,0,128];
-
 	for(var i = 0; i < msemu_4to8_loader.length; i++) {
 		dataflash[i] = msemu_4to8_loader[i];
 	}
 
+	// Now, concatenate the dropped file to the loader
 	for(var i = 0; i < loadedAppBytes.length; i++) {
 		dataflash[msemu_4to8_loader.length + i] = loadedAppBytes[i];
 	}
 
+	// If this is the second time the channel is installed, the MS needs to be restarted to get back to a clean state. That's because
+	// most homebrew apps don't integrate with the MS firmware, so after they run there's no way to return to the menu
+	if (channelPreviouslyInstalled) {
 	reset();
+	} else {
+		channelPreviouslyInstalled = true;
+	}
+
 	start();
 });
 
