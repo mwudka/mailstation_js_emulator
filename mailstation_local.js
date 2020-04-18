@@ -663,7 +663,7 @@ fileReaderRAMApp.addEventListener('loadend', function() {
 	// If this is the second time the channel is installed, the MS needs to be restarted to get back to a clean state. That's because
 	// most homebrew apps don't integrate with the MS firmware, so after they run there's no way to return to the menu
 	if (channelPreviouslyInstalled) {
-	reset();
+		reset();
 	} else {
 		channelPreviouslyInstalled = true;
 	}
@@ -1068,6 +1068,8 @@ function init_LCD() {
 
 
 var pixelcolumn;
+// TODO: This array backs the readLCD function. The current implementation is gross, and doesn't quite match what happens on real devices.
+var lcdData = [];
 
 function writeLCD(rowaddr, right, val) {
 // each mailstation LCDwrite fills 8 LCD pixels, which need to be
@@ -1088,6 +1090,8 @@ function writeLCD(rowaddr, right, val) {
 	rowaddr = rowaddr - 56;
 	
 	var pixelAddress = (1280 * (rowaddr)) + pixelcolumn;
+
+	lcdData[pixelAddress] = val;
 	
 	for (var p = 0; p < 8; p++) {
 		if (val & (1<<p)) {
@@ -1104,6 +1108,24 @@ function writeLCD(rowaddr, right, val) {
 	}
 }
 
+function readLCD(rowaddr, right) {
+	if ( !(port2 & 0x08) ) {
+		// it is a column address  (0 thru 19)
+		// column * 8 pix per col * 4 byte per pix
+		pixelcolumn = (19 - val)  * 32;
+
+		// offset to right half of LCD = 160 pix * 4 bytes per pix = 640
+		if (right) pixelcolumn += 640;
+		return 0;
+	}
+
+	if (rowaddr < 56) return 0;
+	if (rowaddr > 183) return 0;
+	rowaddr = rowaddr - 56;
+
+	var pixelAddress = (1280 * (rowaddr)) + pixelcolumn;
+	return lcdData[pixelAddress];
+}
 
 var canvasMinX;
 var canvasMaxX;
