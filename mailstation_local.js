@@ -634,11 +634,14 @@ function load_dataflash() {
 	}
 }
 
-var file;
-var fileReader = new FileReader();
+var fileRAMApp;
+var fileReaderRAMApp = new FileReader();
 
-fileReader.addEventListener('loadend', function() {
-	var loadedAppBytes = new Uint8Array(fileReader.result);
+var fileChannel;
+var fileReaderChannel = new FileReader();
+
+fileReaderRAMApp.addEventListener('loadend', function() {
+	var loadedAppBytes = new Uint8Array(fileReaderRAMApp.result);
 
 	stop();
 
@@ -651,6 +654,14 @@ fileReader.addEventListener('loadend', function() {
 	start();
 });
 
+fileReaderChannel.addEventListener('loadend', function() {
+	var loadedChannelBytes = new Uint8Array(fileReaderChannel.result);
+	
+	for(var i = 0; i < loadedChannelBytes.length; i++) {
+		dataflash[i] = loadedChannelBytes[i];
+	}
+});
+
 function dragenter_handler(e) {
 	e.stopPropagation();
 	e.preventDefault();
@@ -661,18 +672,32 @@ function dragover_handler(e) {
 	e.preventDefault();
 }
 
-function drop_handler(e) {
+function drop_handler_ramapp(e) {
 	e.stopPropagation();
 	e.preventDefault();
   
-	var dt = event.dataTransfer;
-	file = dt.files[0];
+	var dt = e.dataTransfer;
+	fileRAMApp = dt.files[0];
   
 	run_from_0x8000();
 }
 
+function reload_channel() {
+	fileReaderChannel.readAsArrayBuffer(fileChannel);
+}
+
+function drop_handler_channel(e) {
+	e.stopPropagation();
+	e.preventDefault();
+  
+	var dt = e.dataTransfer;
+	fileChannel = dt.files[0];
+  
+	reload_channel();
+}
+
 function run_from_0x8000() {
-	fileReader.readAsArrayBuffer(file);
+	fileReaderRAMApp.readAsArrayBuffer(fileRAMApp);
 }
 
 var dfwritelimit = 100; // test aid, to limit log output!!!

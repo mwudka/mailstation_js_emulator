@@ -151,11 +151,19 @@ Breakpoint<br>
 </td>
 
 <td valign="top">
-	<div id="app_drop_area" ondragenter="dragenter_handler(event)" ondragover="dragover_handler(event)" ondrop="drop_handler(event)">
+	<div id="app_drop_area" ondragenter="dragenter_handler(event)" ondragover="dragover_handler(event)" ondrop="drop_handler_ramapp(event)">
 		Drop app compiled for 0x8000
 	</div>
 
 	<input type="button" value="reload & run from 0x8000" onclick="run_from_0x8000()">
+
+	<hr>
+
+	<div id="app_drop_area" ondragenter="dragenter_handler(event)" ondragover="dragover_handler(event)" ondrop="drop_handler_channel(event)">
+		Drop channel app
+	</div>
+
+	<input type="button" value="reload & reinstall" onclick="reload_channel()">
 </td>
 
 </tr>
