@@ -1012,7 +1012,7 @@ function keyPress(scancode) {
 	keyDown(scancode);
 	setTimeout(function() {
 		keyUp(scancode);
-	}, 100);
+	}, 500);
 }
 
 function keyDown(scancode) {
