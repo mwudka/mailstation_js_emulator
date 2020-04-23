@@ -889,9 +889,11 @@ var keymatrix = [0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff];
 function init_keyboard() {
 	debuglog('initing keyboard');
 	document.onkeydown = function(e) {
+		debuglog('onkeydown ' + e.keyCode);
 		keyDown(e.keyCode);
 	};
 	document.onkeyup = function(e) {
+		debuglog('onkeyup ' + e.keyCode);
 		keyUp(e.keyCode);
 	};
 }
