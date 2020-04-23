@@ -933,8 +933,8 @@ var keyboardmap = {
 	 56: {row: 3, column: 0x01}, // 8
 	 57: {row: 3, column: 0x02}, // 9
 	 48: {row: 3, column: 0x04}, // 0
-	109: {row: 3, column: 0x08}, // -
-	 61: {row: 3, column: 0x10}, // =
+	189: {row: 3, column: 0x08}, // -
+	187: {row: 3, column: 0x10}, // =
 	  8: {row: 3, column: 0x20}, // del (backspace)
 	191: {row: 3, column: 0x40}, // backslash
 	 34: {row: 3, column: 0x80}, // pg dn
@@ -951,7 +951,7 @@ var keyboardmap = {
 	 80: {row: 5, column: 0x04}, // P
 	219: {row: 5, column: 0x08}, // [
 	221: {row: 5, column: 0x10}, // ]
-	 59: {row: 5, column: 0x20}, // ;
+	186: {row: 5, column: 0x20}, // ;
 	222: {row: 5, column: 0x40}, // '
 	 20: {row: 6, column: 0x01}, // cap lock
 	 65: {row: 6, column: 0x02}, // A
